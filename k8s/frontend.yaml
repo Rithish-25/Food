@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: food-frontend
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: food-frontend
+  template:
+    metadata:
+      labels:
+        app: food-frontend
+    spec:
+      containers:
+      - name: food-frontend
+        image: food-website-frontend:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3000
+        env:
+        - name: REACT_APP_API_URL
+          value: "http://localhost:8001/api"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: food-frontend
+  namespace: default
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8002
+    targetPort: 3000
+  selector:
+    app: food-frontend
