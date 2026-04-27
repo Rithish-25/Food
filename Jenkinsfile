@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         DOCKER_COMPOSE_COMMAND = "docker-compose"
+        COMPOSE_PROJECT_NAME = "food"
     }
 
     stages {
@@ -31,7 +32,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying application...'
-                // Remove existing containers to prevent name conflicts
+                // Force remove any conflicting containers with these names
+                sh "docker rm -f food-backend food-frontend food-prometheus food-grafana food-node-exporter || true"
+                // Remove existing project containers
                 sh "${DOCKER_COMPOSE_COMMAND} down --remove-orphans"
                 // Start fresh containers
                 sh "${DOCKER_COMPOSE_COMMAND} up -d"
