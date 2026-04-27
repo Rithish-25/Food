@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_COMPOSE_COMMAND = "docker-compose"
-        COMPOSE_PROJECT_NAME = "food"
+        COMPOSE_PROJECT_NAME = "food-production"
     }
 
     stages {
@@ -32,12 +32,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying application...'
-                // Force remove any conflicting containers with these names
+                // Force remove only the app containers (not Jenkins)
                 sh "docker rm -f food-backend food-frontend food-prometheus food-grafana food-node-exporter || true"
-                // Remove existing project containers
-                sh "${DOCKER_COMPOSE_COMMAND} down --remove-orphans"
-                // Start fresh containers
-                sh "${DOCKER_COMPOSE_COMMAND} up -d"
+                // Start the app in its own project
+                sh "${DOCKER_COMPOSE_COMMAND} up -d --force-recreate"
             }
         }
     }
