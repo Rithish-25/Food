@@ -31,7 +31,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying application...'
-                // Restarting containers to ensure they use the new images
+                // Remove existing containers to prevent name conflicts
+                sh "${DOCKER_COMPOSE_COMMAND} down --remove-orphans"
+                // Start fresh containers
                 sh "${DOCKER_COMPOSE_COMMAND} up -d"
             }
         }
