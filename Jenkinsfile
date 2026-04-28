@@ -32,10 +32,13 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying application...'
-                // Force remove only the app containers (not Jenkins)
-                sh "docker rm -f food-backend food-frontend food-prometheus food-grafana food-node-exporter || true"
+                // Stop and remove existing containers for this project
+                sh "${DOCKER_COMPOSE_COMMAND} down --remove-orphans || true"
+                
+                // Also cleanup any containers from manual runs that might be using the same ports (e.g. 9100)
+                sh "docker rm -f food-backend-1 food-frontend-1 food-prometheus-1 food-grafana-1 food-node-exporter-1 || true"
                 // Start the app in its own project
-                sh "${DOCKER_COMPOSE_COMMAND} up -d --force-recreate"
+                sh "${DOCKER_COMPOSE_COMMAND} up -d"
             }
         }
     }
