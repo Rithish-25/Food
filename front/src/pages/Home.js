@@ -42,7 +42,7 @@ const Home = () => {
               <span className="gradient-text">Delivered to You</span>
             </h1>
             <p className="text-gray-600 text-lg md:text-xl mb-10 max-w-lg">
-              Experience the best flavors from top chefs. Fresh ingredients, fast delivery, and an unforgettable taste experience.
+              Experience the best flavor from top chefs. Fresh ingredients, fast delivery, and an unforgettable taste experience.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link to="/menu" className="hero-gradient text-white px-8 py-4 rounded-2xl font-bold flex items-center gap-2 shadow-xl shadow-orange-200 hover:scale-105 transition-transform">
